@@ -5,11 +5,15 @@ import com.sigmabravo.rnd.ismcatalogschema.Catalog;
 import com.sigmabravo.rnd.ismcatalogschema.Citation;
 import com.sigmabravo.rnd.ismcatalogschema.Control;
 import com.sigmabravo.rnd.ismcatalogschema.Group;
+import com.sigmabravo.rnd.ismcatalogschema.Insert;
 import com.sigmabravo.rnd.ismcatalogschema.LastModified;
 import com.sigmabravo.rnd.ismcatalogschema.Link;
 import com.sigmabravo.rnd.ismcatalogschema.Metadata;
 import com.sigmabravo.rnd.ismcatalogschema.ObjectFactory;
 import com.sigmabravo.rnd.ismcatalogschema.OscalVersion;
+import com.sigmabravo.rnd.ismcatalogschema.P;
+import com.sigmabravo.rnd.ismcatalogschema.Param;
+import com.sigmabravo.rnd.ismcatalogschema.Part;
 import com.sigmabravo.rnd.ismcatalogschema.Prop;
 import com.sigmabravo.rnd.ismcatalogschema.Title;
 import com.sigmabravo.rnd.ismcatalogschema.Version;
@@ -25,6 +29,7 @@ import java.io.File;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -71,18 +76,30 @@ public class Resolver {
         doMerge();
         doModify();
 
+        // TODO: needs to clean up params.
         catalog.getControl().addAll(selectedControls);
         // TODO: needs to handle nested groups too.
         for (Group g : selectedGroups) {
+            List<String> paramForGroup = new ArrayList<>();
             Group cleanedGroup = g;
             List<Control> cleanedControls = new ArrayList<>();
             for (Control control : g.getControl()) {
                 if (controlsWeWant.contains(control.getId())) {
+                    List<String> paramReferences = getParamsFromControl(control);
+                    paramForGroup.addAll(paramReferences);
                     cleanedControls.add(control);
                 }
             }
             cleanedGroup.getControl().clear();
             cleanedGroup.getControl().addAll(cleanedControls);
+            List<Param> cleanedParams = new ArrayList<>();
+            for (Param param: g.getParam()) {
+                if (paramForGroup.contains(param.getId())) {
+                    cleanedParams.add(param);
+                }
+            }
+            cleanedGroup.getParam().clear();
+            cleanedGroup.getParam().addAll(cleanedParams);
             catalog.getGroup().add(cleanedGroup);
         }
 
@@ -342,6 +359,37 @@ public class Resolver {
             }
         }
         return null;
+    }
+
+    private List<String> getParamsFromControl(Control control) {
+        List<String> paramIds = new ArrayList<>();
+        for (Part part: control.getPart()) {
+            paramIds.addAll(getParamsFromPart(part));
+        }
+        return paramIds;
+    }
+
+    private List<String> getParamsFromPart(Part part) {
+        List<String> paramIds = new ArrayList<>();
+        for (Object prose: part.getPROSE()) {
+            if (prose instanceof P) {
+                P p = (P)prose;
+                paramIds.addAll(getParamsFromP(p));
+            }
+        }
+        return paramIds;
+        
+    }
+
+    private List<String> getParamsFromP(P p) {
+         List<String> paramIds = new ArrayList<>();
+         for (Object content: p.getContent()) {
+             if (content instanceof Insert) {
+                 Insert insert = (Insert)content;
+                 paramIds.add(insert.getParamId());
+             }
+         }
+         return paramIds;
     }
 
 }

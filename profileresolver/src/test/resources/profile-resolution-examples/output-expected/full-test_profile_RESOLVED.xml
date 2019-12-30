@@ -14,10 +14,6 @@
             <label>A.a parameter</label>
             <value>A.a value</value>
         </param>
-        <param id="param-A.b">
-            <label>A.b parameter</label>
-            <value>A.b value</value>
-        </param>
         <control id="a1">
             <title>Control A1</title>
             <param id="param-a1.a">

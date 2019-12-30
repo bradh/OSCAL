@@ -18,25 +18,23 @@ package com.sigmabravo.rnd.oscal.profileresolver;
 import com.sigmabravo.rnd.ismcatalogschema.Catalog;
 import java.io.File;
 import java.net.URL;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class ResolverMatchTest extends AbstractResolverTest {
-    
-    public ResolverMatchTest() {
+public class ResolverFullCatalogTest extends AbstractResolverTest {
+
+    public ResolverFullCatalogTest() {
     }
-    
+
     @Test
-    public void testIncludeMatchProfileResolution() {
-        URL sourceProfileUrl = Thread.currentThread().getContextClassLoader().getResource("profile-resolution-examples/include-match-test_profile.xml");
+    public void testFullProfileResolution() {
+        URL sourceProfileUrl = Thread.currentThread().getContextClassLoader().getResource("profile-resolution-examples/full-test_profile.xml");
         File sourceProfile = new File(sourceProfileUrl.getPath());
         assertTrue(sourceProfile.exists());
 
         Resolver resolver = new Resolver(sourceProfile);
         Catalog result = resolver.resolve();
 
-        checkResultAgainstExpected(result, "profile-resolution-examples/output-expected/include-match-test_profile_RESOLVED.xml");
+        checkResultAgainstExpected(result, "profile-resolution-examples/output-expected/full-test_profile_RESOLVED.xml");
     }
-
-    
 }
