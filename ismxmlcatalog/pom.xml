@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sigmabravo.rnd</groupId>
+        <artifactId>ismtools</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>ismxmlcatalog</artifactId>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <jaxb.generated>${project.build.directory}/generated-sources/jaxb</jaxb.generated>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.davidmoten</groupId>
+                <artifactId>jax-maven-plugin</artifactId>
+                <version>0.1.8</version>
+                <executions>
+                    <execution>
+                        <id>xjc-schema1</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <target>2.2</target>
+                            <schemaFiles>oscal_catalog_schema.xsd</schemaFiles>
+                            <packageName>com.sigmabravo.rnd.ismcatalogschema</packageName>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>
+                                <!-- These are the arguments you would normally 
+                                have put with a call to xjc -->
+                                <argument>-verbose</argument>
+                                <argument>-d</argument>
+                                <argument>${jaxb.generated}</argument>
+                                <argument>-p</argument>
+                                <argument>com.sigmabravo.rnd.ismcatalogschema</argument>
+                                <argument>${project.basedir}/src/main/xsd/oscal_catalog_schema.xsd</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${jaxb.generated}</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <name>OSCAL XML Catalog</name>
+</project>
