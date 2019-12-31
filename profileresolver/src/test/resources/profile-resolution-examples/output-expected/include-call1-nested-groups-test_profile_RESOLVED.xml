@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0"
+         id="include-call1-nested-groups-test_profile-RESOLVED">
+    <metadata>
+        <title>Test Profile</title>
+        <last-modified>2019-12-31T18:06:04.000+11:00</last-modified>
+        <version>1.0</version>
+        <oscal-version>1.0-MR2</oscal-version>
+        <prop name="resolution-timestamp">2019-12-31T18:06:04.000+11:00</prop>
+        <link rel="resolution-source" href="../include-call1-nested-groups-test_profile.xml">Test Profile</link>
+    </metadata>
+    <group id="l1group1">
+        <title>Level 1 Group 1</title>
+        <group id="l2group12">
+            <title>Level 2 Group 1.2</title>
+            <group id="l3group121">
+                <title>Level 3 Group 1.2.1</title>
+                <part name="guidance">
+                    <p>Level 3 Group 1.2.1 text.</p>
+                </part>
+                <control id="controlid-0003">
+                    <title>Control 0003</title>
+                    <prop name="label">0003</prop>
+                    <prop name="Revision" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">1</prop>
+                    <prop name="Updated" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">Sep-18</prop>
+                    <part name="statement">
+                        <p>Control 0003 statement.</p>
+                    </part>
+                </control>
+            </group>
+        </group>
+    </group>
+</catalog>

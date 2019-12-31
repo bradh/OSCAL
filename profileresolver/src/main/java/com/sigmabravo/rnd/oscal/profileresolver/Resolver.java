@@ -78,29 +78,10 @@ public class Resolver {
 
         // TODO: needs to clean up params.
         catalog.getControl().addAll(selectedControls);
-        // TODO: needs to handle nested groups too.
         for (Group g : selectedGroups) {
-            List<String> paramForGroup = new ArrayList<>();
-            Group cleanedGroup = g;
-            List<Control> cleanedControls = new ArrayList<>();
-            for (Control control : g.getControl()) {
-                if (controlsWeWant.contains(control.getId())) {
-                    List<String> paramReferences = getParamsFromControl(control);
-                    paramForGroup.addAll(paramReferences);
-                    cleanedControls.add(control);
-                }
+            if (groupHasAnyControlsWeWant(g)) {
+                catalog.getGroup().add(cleanGroup(g));
             }
-            cleanedGroup.getControl().clear();
-            cleanedGroup.getControl().addAll(cleanedControls);
-            List<Param> cleanedParams = new ArrayList<>();
-            for (Param param: g.getParam()) {
-                if (paramForGroup.contains(param.getId())) {
-                    cleanedParams.add(param);
-                }
-            }
-            cleanedGroup.getParam().clear();
-            cleanedGroup.getParam().addAll(cleanedParams);
-            catalog.getGroup().add(cleanedGroup);
         }
 
         if (!citations.isEmpty()) {
@@ -110,6 +91,39 @@ public class Resolver {
         }
 
         return catalog;
+    }
+
+    private Group cleanGroup(Group g) {
+        // TODO: needs to handle nested groups too.
+        List<String> paramForGroup = new ArrayList<>();
+        Group cleanedGroup = g;
+        List<Control> cleanedControls = new ArrayList<>();
+        for (Control control : g.getControl()) {
+            if (controlsWeWant.contains(control.getId())) {
+                List<String> paramReferences = getParamsFromControl(control);
+                paramForGroup.addAll(paramReferences);
+                cleanedControls.add(control);
+            }
+        }
+        cleanedGroup.getControl().clear();
+        cleanedGroup.getControl().addAll(cleanedControls);
+        List<Group> cleanedSubGroups = new ArrayList<>();
+        for (Group subGroup: g.getGroup()) {
+            if (groupHasAnyControlsWeWant(subGroup)) {
+                cleanedSubGroups.add(cleanGroup(subGroup));
+            }
+        }
+        cleanedGroup.getGroup().clear();
+        cleanedGroup.getGroup().addAll(cleanedSubGroups);
+        List<Param> cleanedParams = new ArrayList<>();
+        for (Param param: g.getParam()) {
+            if (paramForGroup.contains(param.getId())) {
+                cleanedParams.add(param);
+            }
+        }
+        cleanedGroup.getParam().clear();
+        cleanedGroup.getParam().addAll(cleanedParams);
+        return cleanedGroup;
     }
 
     private Metadata createMetadata() {
@@ -239,8 +253,22 @@ public class Resolver {
                     }
                     controlsWeWant.add(control.getId());
                 }
-                // TODO: this probably needs to recurse
+                selectAllControlsFromSubGroups(group.getGroup(), withChildControls);
                 selectedGroups.add(group);
+            }
+        }
+    }
+    
+    private void selectAllControlsFromSubGroups(List<Group> groups, Boolean withChildControls) {
+        for (Group group : groups) {
+            if (groupHasAnyControls(group)) {
+                for (Control control : group.getControl()) {
+                    if (!withChildControls) {
+                        control.getControl().clear();
+                    }
+                    controlsWeWant.add(control.getId());
+                }
+                selectAllControlsFromSubGroups(group.getGroup(), withChildControls);
             }
         }
     }
@@ -284,6 +312,16 @@ public class Resolver {
                 return;
             }
         }
+        List<Group> cleanedGroups = new ArrayList<>();
+        for (Group subGroup: group.getGroup()) {
+            for (String c: controlsWeWant) {
+                if (groupHasCalledControl(subGroup, c)) {
+                    cleanedGroups.add(subGroup);
+                }
+            }
+        }
+        group.getGroup().clear();
+        group.getGroup().addAll(cleanedGroups);
         selectedGroups.add(group);
     }
 
@@ -390,6 +428,21 @@ public class Resolver {
              }
          }
          return paramIds;
+    }
+
+    private boolean groupHasAnyControlsWeWant(Group group) {
+        for (Control control: group.getControl()) {
+            String controlId = control.getId();
+            if (controlsWeWant.contains(controlId)) {
+                return true;
+            }
+        }
+        for (Group subGroup: group.getGroup()) {
+            if (groupHasAnyControlsWeWant(subGroup)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

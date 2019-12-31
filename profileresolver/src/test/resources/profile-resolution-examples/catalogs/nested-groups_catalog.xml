@@ -139,7 +139,7 @@
                         <li>List item 4</li>
                     </ul>
                 </part>
-                <control id="controlid-0576">
+                <control id="controlid-0007">
                     <title>Control 0007</title>
                     <prop name="label">0007</prop>
                     <prop name="Revision" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">7</prop>
