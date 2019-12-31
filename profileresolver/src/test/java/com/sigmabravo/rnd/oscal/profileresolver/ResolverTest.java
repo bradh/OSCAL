@@ -125,8 +125,4 @@ public class ResolverTest extends AbstractResolverTest {
 
         checkResultAgainstExpected(result, "profile-resolution-examples/output-expected/include-call-with-children-test_profile_RESOLVED.xml");
     }
-
-    // TODO: merge-implicit-keep_profile.xml
-    // TODO: merge-keep_profile.xml
-    
 }
