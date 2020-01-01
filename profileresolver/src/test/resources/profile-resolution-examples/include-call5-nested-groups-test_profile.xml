@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile xmlns="http://csrc.nist.gov/ns/oscal/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://csrc.nist.gov/ns/oscal/1.0 ../../../../xml/schema/oscal_profile_schema.xsd"
+    id="include-call5-nested-groups-test_profile">
+    <metadata>
+        <title>Test Profile</title>
+        <last-modified>2020-01-01T20:40:02.000+11:00</last-modified>
+        <version>1.0</version>
+        <oscal-version>1.0-MR2</oscal-version>
+    </metadata>
+    <import href="catalogs/nested-groups_catalog.xml">
+        <include>
+            <call control-id="controlid-0001"/>
+            <call control-id="controlid-0003"/>
+            <call control-id="controlid-0005"/>
+            <call control-id="controlid-0012"/>
+            <call control-id="controlid-0013"/>
+        </include>
+    </import>
+</profile>

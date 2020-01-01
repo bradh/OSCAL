@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0"
+         id="include-call5-nested-groups-test_profile-RESOLVED">
+    <metadata>
+        <title>Test Profile</title>
+        <last-modified>2020-01-01T20:40:02.000+11:00</last-modified>
+        <version>1.0</version>
+        <oscal-version>1.0-MR2</oscal-version>
+        <prop name="resolution-timestamp">2019-12-31T17:15:22.000+11:00</prop>
+        <link rel="resolution-source" href="../include-call5-nested-groups-test_profile.xml">Test Profile</link>
+    </metadata>
+    <group id="l1group1">
+        <title>Level 1 Group 1</title>
+        <group id="l2group11">
+            <title>Level 2 Group 1.1</title>
+            <group id="l3group111">
+                <title>Level 3 Group 1.1.1</title>
+                <part name="guidance">
+                    <p>Level 3 Group 1.1.1 text.</p>
+                </part>
+                <control id="controlid-0001">
+                    <title>Control 0001</title>
+                    <prop name="label">0001</prop>
+                    <prop name="Revision" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">4</prop>
+                    <prop name="Updated" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">Sep-18</prop>
+                    <part name="statement">
+                        <p>Control 0001 statement.</p>
+                    </part>
+                </control>
+            </group>
+        </group>
+        <group id="l2group12">
+            <title>Level 2 Group 1.2</title>
+            <group id="l3group121">
+                <title>Level 3 Group 1.2.1</title>
+                <part name="guidance">
+                    <p>Level 3 Group 1.2.1 text.</p>
+                </part>
+                <control id="controlid-0003">
+                    <title>Control 0003</title>
+                    <prop name="label">0003</prop>
+                    <prop name="Revision" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">1</prop>
+                    <prop name="Updated" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">Sep-18</prop>
+                    <part name="statement">
+                        <p>Control 0003 statement.</p>
+                    </part>
+                </control>
+            </group>
+            <group id="l3group122">
+                <title>Level 3 Group 1.2.2</title>
+                <part name="guidance">
+                    <p>Level 3 Group 1.2.2 text.</p>
+                </part>
+                <control id="controlid-0005">
+                    <title>Control 0005</title>
+                    <prop name="label">0005</prop>
+                    <prop name="Revision" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">3</prop>
+                    <prop name="Updated" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">Sep-18</prop>
+                    <part name="statement">
+                        <p>Control 0005 statement.</p>
+                    </part>
+                </control>
+            </group>
+        </group>
+    </group>
+    <group id="l1group2">
+        <title>Level 1 Group 2</title>
+        <group id="l2group23">
+            <title>Level 2 Group 2.3</title>
+            <control id="controlid-0012">
+                <title>Control 0012</title>
+                <prop name="label">0012</prop>
+                <prop name="Revision" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">3</prop>
+                <prop name="Updated" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">Sep-18</prop>
+                <part name="statement">
+                    <p>Control 0012 statement.</p>
+                </part>
+            </control>
+            <control id="controlid-0013">
+                <title>Control 0013</title>
+                <prop name="label">0013</prop>
+                <prop name="Revision" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">3</prop>
+                <prop name="Updated" ns="urn:uuid:5dab2ee4-11be-11ea-865a-672481b505d3">Sep-18</prop>
+                <part name="statement">
+                    <p>Control 0013 statement.</p>
+                </part>
+            </control>
+        </group>
+    </group>
+</catalog>

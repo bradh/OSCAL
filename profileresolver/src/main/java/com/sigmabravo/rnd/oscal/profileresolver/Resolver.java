@@ -29,7 +29,6 @@ import java.io.File;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -185,15 +184,16 @@ public class Resolver {
                     All all = in.getAll();
                     Boolean withChildControls = !("no".equalsIgnoreCase(all.getWithChildControls()));
                     addAll(catalogForThisImport, withChildControls);
-                }
-                for (Call call : in.getCall()) {
-                    controlsWeWant.add(call.getControlId());
-                    selectCalledControl(call, catalogForThisImport.getControl());
-                    selectGroupsWithCalledControls(call, catalogForThisImport.getGroup());
-                }
-                for (Match match : in.getMatch()) {
-                    selectMatchedControl(match, catalogForThisImport.getControl());
-                    selectGroupsWithMatchingControls(match, catalogForThisImport.getGroup());
+                } else {
+                    selectGroupsWithControls(catalogForThisImport.getGroup());
+                    for (Call call : in.getCall()) {
+                        controlsWeWant.add(call.getControlId());
+                        selectCalledControl(call, catalogForThisImport.getControl());
+                    }
+                    for (Match match : in.getMatch()) {
+                        selectMatchedControl(match, catalogForThisImport.getControl());
+                        selectGroupsWithMatchingControls(match, catalogForThisImport.getGroup());
+                    }
                 }
             }
             Exclude ex = im.getExclude();
@@ -285,11 +285,10 @@ public class Resolver {
         return false;
     }
 
-    private void selectGroupsWithCalledControls(Call call, List<Group> groups) {
-        String controlId = call.getControlId();
+    private void selectGroupsWithControls(List<Group> groups) {
         for (Group group : groups) {
-            if (groupHasCalledControl(group, controlId)) {
-                selectGroup(group);
+            if (groupHasAnyControls(group)) {
+                selectedGroups.add(group);
             }
         }
     }
@@ -298,45 +297,9 @@ public class Resolver {
         Pattern pattern = Pattern.compile(match.getPattern());
         for (Group group : groups) {
             if (groupHasMatchingControl(group, pattern)) {
-                selectGroup(group);
                 addMatchingControlsToList(group, pattern);
             }
         }
-    }
-
-    private void selectGroup(Group group) {
-        // TODO: this will need to be smarter
-        for (Group g : selectedGroups) {
-            if (g.getTitle().equals(group.getTitle())) {
-                // We already have this one
-                return;
-            }
-        }
-        List<Group> cleanedGroups = new ArrayList<>();
-        for (Group subGroup: group.getGroup()) {
-            for (String c: controlsWeWant) {
-                if (groupHasCalledControl(subGroup, c)) {
-                    cleanedGroups.add(subGroup);
-                }
-            }
-        }
-        group.getGroup().clear();
-        group.getGroup().addAll(cleanedGroups);
-        selectedGroups.add(group);
-    }
-
-    private boolean groupHasCalledControl(Group group, String controlId) {
-        for (Control control : group.getControl()) {
-            if (control.getId().equals(controlId)) {
-                return true;
-            }
-        }
-        for (Group subgroup : group.getGroup()) {
-            if (groupHasCalledControl(subgroup, controlId)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean groupHasMatchingControl(Group group, Pattern pattern) {

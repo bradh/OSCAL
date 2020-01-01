@@ -49,4 +49,16 @@ public class ResolverNestedGroupsTest extends AbstractResolverTest {
 
         checkResultAgainstExpected(result, "profile-resolution-examples/output-expected/include-call1-nested-groups-test_profile_RESOLVED.xml");
     }
+
+    @Test
+    public void testNestedGroupsCall5lProfileResolution() {
+        URL sourceProfileUrl = Thread.currentThread().getContextClassLoader().getResource("profile-resolution-examples/include-call5-nested-groups-test_profile.xml");
+        File sourceProfile = new File(sourceProfileUrl.getPath());
+        assertTrue(sourceProfile.exists());
+
+        Resolver resolver = new Resolver(sourceProfile);
+        Catalog result = resolver.resolve();
+
+        checkResultAgainstExpected(result, "profile-resolution-examples/output-expected/include-call5-nested-groups-test_profile_RESOLVED.xml");
+    }
 }
